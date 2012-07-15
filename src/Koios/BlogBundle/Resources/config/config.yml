@@ -1,0 +1,3 @@
+parameters:
+    koios_blog.emails.contact_email: contact@gmail.com
+    koios_blog.comments.latest_comment_limit: 10

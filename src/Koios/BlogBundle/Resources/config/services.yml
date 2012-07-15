@@ -1,0 +1,11 @@
+parameters:
+#    koios_blog.example.class: Koios\BlogBundle\Example
+
+services:
+    koios_blog.twig.extension:
+        class: Koios\BlogBundle\Twig\Extensions\KoiosBlogBundleExtension
+        tags:
+            - { name: twig.extension }
+#    koios_blog.example:
+#        class: %koios_blog.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

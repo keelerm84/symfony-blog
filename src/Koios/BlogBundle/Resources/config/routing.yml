@@ -1,0 +1,31 @@
+KoiosBlogBundle_homepage:
+    pattern:  /
+    defaults: { _controller: KoiosBlogBundle:Page:index }
+    requirements:
+        _method:  GET
+
+KoiosBlogBundle_about:
+    pattern: /about
+    defaults: { _controller: KoiosBlogBundle:Page:about }
+    requirements:
+        _method: GET
+
+KoiosBlogBundle_contact:
+    pattern: /contact
+    defaults: { _controller: KoiosBlogBundle:Page:contact }
+    requirements:
+        _method: GET|POST
+
+KoiosBlogBundle_blog_show:
+    pattern: /{id}/{slug}
+    defaults: { _controller: KoiosBlogBundle:Blog:show }
+    requirements:
+        _method: GET
+        id: \d+
+
+KoiosBlogBundle_comment_create:
+    pattern: /comment/{blog_id}
+    defaults: { _controller: KoiosBlogBundle:Comment:create }
+    requirements:
+        _method: POST
+        blog_id: \d+
