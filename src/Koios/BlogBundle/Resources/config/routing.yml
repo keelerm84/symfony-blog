@@ -4,6 +4,16 @@ KoiosBlogBundle_homepage:
     requirements:
         _method:  GET
 
+login:
+    pattern: /login
+    defaults: { _controller: KoiosBlogBundle:Security:login }
+
+login_check:
+    pattern: /login_check
+
+logout:
+    pattern: /logout
+
 KoiosBlogBundle_about:
     pattern: /about
     defaults: { _controller: KoiosBlogBundle:Page:about }
@@ -29,3 +39,28 @@ KoiosBlogBundle_comment_create:
     requirements:
         _method: POST
         blog_id: \d+
+
+KoiosBlogBundle_admin:
+    pattern: /admin/
+    defaults: { _controller: KoiosBlogBundle:Admin:index }
+    requirements:
+        _method: GET
+
+KoiosBlogBundle_admin_blog_delete:
+    pattern: /admin/delete/
+    defaults: { _controller: KoiosBlogBundle:Admin:delete }
+    requirements:
+        _method: POST
+
+KoiosBlogBundle_admin_blog_edit:
+    pattern: /admin/edit/{id}
+    defaults: { _controller: KoiosBlogBundle:Admin:edit }
+    requirements:
+        _method: GET|POST
+        id: \d+
+
+KoiosBlogBundle_admin_blog_create:
+    pattern: /admin/create
+    defaults: { _controller: KoiosBlogBundle:Admin:create }
+    requirements:
+        _method: GET|POST

@@ -3,7 +3,7 @@
 {% block stylesheets %}
     {{ parent() }}
 
-    {% stylesheets '@KoiosBlogBundle/Resources/public/css/*' output='css/blogger.css' filter='?yui_css' %}
+    {% stylesheets '@KoiosBlogBundle/Resources/public/css/*' output='css/blogger.css' filter='cssrewrite,?yui_css' %}
         <link href="{{ asset_url }}" rel="stylesheet" media="screen" />
     {% endstylesheets %}
 {% endblock %}

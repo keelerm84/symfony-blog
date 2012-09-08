@@ -1,0 +1,45 @@
+{% extends 'KoiosBlogBundle::layout.html.twig' %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block body %}
+    {% if app.session.hasFlash('blogger-notice') %}
+        <div class="blogger-notice">
+            {{ app.session.flash('blogger-notice') }}
+        </div>
+    {% elseif app.session.hasFlash('blogger-error') %}
+        <div class="blogger-error">
+            {{ app.session.flash('blogger-error') }}
+        </div>
+    {% endif %}
+
+    <p><a href="{{ path('KoiosBlogBundle_admin_blog_create') }}"><button>Create New Entry</button></a></p>
+    <form class="post-list" action="{{ path('KoiosBlogBundle_admin_blog_delete') }}" method='post'>
+    <table>
+        <thead>
+            <tr>
+                <td>&nbsp;</td>
+                <td>Title</td>
+                <td>Author</td>
+                <td>Created</td>
+                <td>Updated</td>
+            </tr>
+        </thead>
+        <tfoot>
+        </tfoot>
+        <tbody>
+    {% for blog in blogs %}
+            <tr>
+                <td><input type="checkbox" name="blogs[{{ blog.id }}]" /></td>
+                <td><a href="{{ path('KoiosBlogBundle_admin_blog_edit', { 'id': blog.id }) }}">{{ blog.title }}</a></td>
+                <td>{{ blog.author }}</td>
+                <td>{{ blog.created|date("m/d/Y") }}</td>
+                <td>{{ blog.updated|date("m/d/Y")}}</td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <input type="submit" name="Delete" value="Delete Selected" />&nbsp;
+    </form>
+{% endblock %}

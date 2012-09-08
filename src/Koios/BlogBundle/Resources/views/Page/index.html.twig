@@ -10,7 +10,7 @@
 
             <img src="{{ asset(['images/', blog.image]|join) }}" />
             <div class="snippet">
-                <p>{{ blog.blog(500) }}</p>
+                <p>{{ blog.blog(500)|raw }}</p>
                 <p class="continue"><a href="{{ path('KoiosBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">Continue reading...</a></p>
             </div>
 

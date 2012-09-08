@@ -1,6 +1,6 @@
 [symfony]
     git=http://github.com/symfony/symfony.git
-    version=origin/2.0
+    version=origin/2.1
 
 [twig]
     git=http://github.com/fabpot/Twig.git
@@ -77,4 +77,9 @@
 [DoctrineMigrationsBundle]
     git=http://github.com/doctrine/DoctrineMigrationsBundle.git
     target=/bundles/Symfony/Bundle/DoctrineMigrationsBundle
+    version=origin/2.0
+
+[IvoryCKEditorBundle]
+    git=http://github.com/egeloen/IvoryCKEditorBundle.git
+    target=/bundles/Ivory/CKEditorBundle
     version=origin/2.0

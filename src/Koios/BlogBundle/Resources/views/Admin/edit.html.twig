@@ -1,0 +1,13 @@
+{% extends 'KoiosBlogBundle::layout.html.twig' %}
+
+{% block title %}{{ blog.title }}{% endblock %}
+
+{% block body %}
+    {% if app.session.hasFlash('blogger-notice') %}
+        <div class="blogger-notice">
+            {{ app.session.flash('blogger-notice') }}
+        </div>
+    {% endif %}
+
+    {% include 'KoiosBlogBundle:Blog:form.html.twig' with { 'form': form, 'form_action': path('KoiosBlogBundle_admin_blog_edit', { 'id' : blog.id})} %}
+{% endblock %}

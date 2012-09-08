@@ -1,6 +1,11 @@
-.blogger-notice { text-align: center; padding: 10px; background: #DFF2BF; border: 1px solid; color: #4F8A10; margin-bottom: 10px; }
+.blogger-info, .blogger-notice, .blogger-warning, .blogger-error { border: 1px solid; margin: 10px 0px; padding:15px 10px 15px 50px; background-repeat: no-repeat; background-position: 10px center; }             
+.blogger-info { color: #00529b; background-color: #bde5f8; background-image: url('/images/info.png'); }
+.blogger-notice { color: #4f8a10; background-color: #dff2bf; background-image:url('/images/success.png'); }
+.blogger-warning { color: #9f6000; background-color: #feefb3; background-image: url('/web/images/warning.png'); }
+.blogger-error { color: #d8000c; background-color: #ffbaba; background-image: url('/images/error.png'); }
+
 form.blogger { font-size: 16px; }
-form.blogger div { clear: left; margin-bottom: 10px; }
+form.blogger div { clear: left; margin-bottom: 10px; :}
 form.blogger label { float: left; margin-right: 10px; text-align: right; width: 100px; font-weight: bold; vertical-align: top; padding-top: 10px; }
 form.blogger input[type="text"],
 form.blogger input[type="email"]
@@ -24,3 +29,11 @@ form.blogger ul li { color: #ff0000; margin-bottom: 5px; }
 .comments .comment p { margin-bottom: 0; }
 .comments h3 { background: #eee; padding: 10px; font-size: 20px; margin-bottom: 20px; clear: both; }
 .comments .previous-comments { margin-bottom: 20px; }
+
+.tagline { font-size: 0.85em; font-style: italic; color: #888; }
+
+input, textarea, button { border: 1px solid #bbb; padding: 5px 3px; }
+
+dt { margin-bottom: 10px; }
+dl + dt { margin-top: 10px; }
+dl input { width: 100%; }

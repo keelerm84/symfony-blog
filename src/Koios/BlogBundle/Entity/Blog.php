@@ -42,7 +42,7 @@ class Blog
     /**
      * @ORM\Column(type="string", length="20")
      */
-    protected $image;
+    protected $image = 'no-image.jpg';
 
     /**
      * @ORM\Column(type="text")
@@ -50,7 +50,7 @@ class Blog
     protected $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="blog")
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="blog", cascade={"persist", "remove"})
      */
     protected $comments;
 
@@ -66,7 +66,7 @@ class Blog
 
     public function __construct() {
         $this->comments = new ArrayCollection();
-        
+
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());
     }
@@ -85,7 +85,7 @@ class Blog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -106,7 +106,7 @@ class Blog
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -126,7 +126,7 @@ class Blog
     /**
      * Get author
      *
-     * @return string 
+     * @return string
      */
     public function getAuthor()
     {
@@ -146,7 +146,7 @@ class Blog
     /**
      * Get blog
      *
-     * @return text 
+     * @return text
      */
     public function getBlog($length = null)
     {
@@ -170,7 +170,7 @@ class Blog
     /**
      * Get image
      *
-     * @return string 
+     * @return string
      */
     public function getImage()
     {
@@ -190,7 +190,7 @@ class Blog
     /**
      * Get tags
      *
-     * @return text 
+     * @return text
      */
     public function getTags()
     {
@@ -210,7 +210,7 @@ class Blog
     /**
      * Get created
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreated()
     {
@@ -230,7 +230,7 @@ class Blog
     /**
      * Get updated
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getUpdated()
     {
@@ -250,7 +250,7 @@ class Blog
     /**
      * Get comments
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getComments()
     {
@@ -270,7 +270,7 @@ class Blog
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {

@@ -1,0 +1,25 @@
+# List page
+form.post-list table { border: 1px solid #ccc; width: 100%; }
+
+form.post-list thead { 
+    font-family: Helvetica;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #222;
+
+    background-image: linear-gradient(bottom, rgb(244,138,0) 0%, rgb(255,185,99) 64%);
+    background-image: -o-linear-gradient(bottom, rgb(244,138,0) 0%, rgb(255,185,99) 64%);
+    background-image: -moz-linear-gradient(bottom, rgb(244,138,0) 0%, rgb(255,185,99) 64%);
+    background-image: -webkit-linear-gradient(bottom, rgb(244,138,0) 0%, rgb(255,185,99) 64%);
+    background-image: -ms-linear-gradient(bottom, rgb(244,138,0) 0%, rgb(255,185,99) 64%);
+
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(244,138,0)), color-stop(0.64, rgb(255,185,99)));
+}
+
+form.post-list tr td { padding: 5px; }
+
+form.post-list tr + tr {
+    border-top: 1px dashed #ccc;
+}
+
+form.post-list tr:nth-child(even) { background-color: #ebe4e6; }
