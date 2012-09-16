@@ -53,7 +53,7 @@ KoiosBlogBundle_admin_blog_delete:
         _method: POST
 
 KoiosBlogBundle_admin_blog_edit:
-    pattern: /admin/edit/{id}
+    pattern: /admin/edit/{blog_id}
     defaults: { _controller: KoiosBlogBundle:Admin:edit }
     requirements:
         _method: GET|POST

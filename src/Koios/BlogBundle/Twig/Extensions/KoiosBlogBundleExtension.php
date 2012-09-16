@@ -11,8 +11,9 @@ class KoiosBlogBundleExtension extends \Twig_Extension
         );
     }
 
-    public function createdAgo(\DateTime $dateTime)
+    public function createdAgo($date)
     {
+        $dateTime = new \DateTime($date);
         $delta = time() - $dateTime->getTimestamp();
         if ($delta < 0)
             throw new \InvalidArgumentException("createdAgo is unable to handle dates in the future");

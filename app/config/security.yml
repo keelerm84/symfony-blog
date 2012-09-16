@@ -1,22 +1,28 @@
 security:
     firewalls:
-        secured_area:
-            pattern:    ^/
-            anonymous: ~
-            form_login: ~
-            logout:
-                path: /logout
-                target: /
+      secured_api:
+        pattern: ^/api/admin/
+        stateless: true
+        http_basic:
+          provider: in_memory
+          realm: "Secured API Area"
+
+      secured_area:
+        pattern:    ^/
+        anonymous: ~
+        form_login: ~
+        logout:
+          path: /logout
+          target: /
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/api/admin, roles: ROLE_ADMIN }
 
     providers:
-        main:
-            entity: { class: Koios\BlogBundle\Entity\User, property: username }
+        in_memory:
+          users:
+            admin: { password: password, roles: 'ROLE_ADMIN' }
 
     encoders:
-        Koios\BlogBundle\Entity\User:
-            algorithm: sha1
-            iterations: 1
-            encode_as_base64: false
+      Symfony\Component\Security\Core\User\User: plaintext

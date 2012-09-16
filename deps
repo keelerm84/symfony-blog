@@ -35,7 +35,7 @@
 
 [metadata]
     git=http://github.com/schmittjoh/metadata.git
-    version=1.0.0
+    version=1.1.1
 
 [SensioFrameworkExtraBundle]
     git=http://github.com/sensio/SensioFrameworkExtraBundle.git
@@ -83,3 +83,23 @@
     git=http://github.com/egeloen/IvoryCKEditorBundle.git
     target=/bundles/Ivory/CKEditorBundle
     version=origin/2.0
+
+[FOSRest]
+    git=git://github.com/FriendsOfSymfony/FOSRest.git
+    target=/bundles/FOS/Rest
+
+[FOSRestBundle]
+    git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
+    target=/bundles/FOS/RestBundle
+
+[JMSSerializerBundle]
+    git=https://github.com/schmittjoh/JMSSerializerBundle.git
+    target=/bundles/JMS/SerializerBundle
+
+[guzzle]
+    git=git://github.com/guzzle/guzzle.git
+    target=guzzle
+
+[DdeboerGuzzleBundle]
+    git=git://github.com/ddeboer/GuzzleBundle.git
+    target=bundles/Ddeboer/GuzzleBundle

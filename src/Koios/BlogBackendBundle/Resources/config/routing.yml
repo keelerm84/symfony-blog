@@ -1,0 +1,58 @@
+KoiosBlogBackendBundle_blogs:
+    pattern: /blogs/{page}/{per_page}
+    defaults: { _controller: KoiosBlogBackendBundle:Blog:getBlogs, page: 1, per_page: 25 }
+    requirements:
+        _method: GET
+        page: \d+
+        per_page: \d+
+
+KoiosBlogBackendBundle_blog:
+    pattern: /blog/{blog_id}
+    defaults: { _controller: KoiosBlogBackendBundle:Blog:getBlog }
+    requirements:
+        _method: GET
+        blog_id: \d+
+
+KoiosBlogBackendBundle_edit_blog:
+    pattern: /admin/blog/{blog_id}
+    defaults: { _controller: KoiosBlogBackendBundle:Admin:edit }
+    requirements:
+        _method: PUT
+        blog_id: \d+
+
+KoiosBlogBackendBundle_create_blog:
+    pattern: /admin/blog/create/
+    defaults: { _controller: KoiosBlogBackendBundle:Admin:create }
+    requirements:
+        _method: POST
+
+KoiosBlogBackendBundle_delete_blog:
+    pattern: /admin/blogs/
+    defaults: { _controller: KoiosBlogBackendBundle:Admin:delete }
+    requirements:
+        _method: DELETE
+
+KoiosBlogBackendBundle_comments:
+    pattern: /blog/{blog_id}/comments
+    defaults: { _controller: KoiosBlogBackendBundle:Blog:getComments }
+    requirements:
+        _method: GET
+
+KoiosBlogBackendBundle_create_comments:
+    pattern: /comment/
+    defaults: { _controller: KoiosBlogBackendBundle:Blog:postBlogComment }
+    requirements:
+        _method: POST
+
+KoiosBlogBackendBundle_latestComments:
+    pattern: /comments/latest/{limit}
+    defaults: { _controller: KoiosBlogBackendBundle:Blog:getLatestComments, limit 25 }
+    requirements:
+        _method: GET
+        limit: \d+
+
+KoiosBlogBackendBundle_tagWeights:
+    pattern: /tagWeights
+    defaults: { _controller: KoiosBlogBackendBundle:Blog:getTagWeights }
+    requirements:
+        _method: GET

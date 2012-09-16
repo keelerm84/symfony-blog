@@ -1,14 +1,14 @@
 <?php
-// src/Koios/BlogBundle/Entity/Comment.php
+// src/Koios/BlogBackendBundle/Entity/Comment.php
 
-namespace Koios\BlogBundle\Entity;
+namespace Koios\BlogBackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * @ORM\Entity(repositoryClass="Koios\BlogBundle\Repository\CommentRepository")
+ * @ORM\Entity(repositoryClass="Koios\BlogBackendBundle\Repository\CommentRepository")
  * @ORM\Table(name="comment")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -76,7 +76,7 @@ class Comment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -96,7 +96,7 @@ class Comment
     /**
      * Get user
      *
-     * @return string 
+     * @return string
      */
     public function getUser()
     {
@@ -116,7 +116,7 @@ class Comment
     /**
      * Get comment
      *
-     * @return text 
+     * @return text
      */
     public function getComment()
     {
@@ -136,7 +136,7 @@ class Comment
     /**
      * Get approved
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getApproved()
     {
@@ -156,7 +156,7 @@ class Comment
     /**
      * Get created
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreated()
     {
@@ -176,7 +176,7 @@ class Comment
     /**
      * Get updated
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getUpdated()
     {
@@ -186,9 +186,9 @@ class Comment
     /**
      * Set blog
      *
-     * @param Koios\BlogBundle\Entity\Blog $blog
+     * @param Koios\BlogBackendBundle\Entity\Blog $blog
      */
-    public function setBlog(\Koios\BlogBundle\Entity\Blog $blog)
+    public function setBlog(\Koios\BlogBackendBundle\Entity\Blog $blog)
     {
         $this->blog = $blog;
     }
@@ -196,7 +196,7 @@ class Comment
     /**
      * Get blog
      *
-     * @return Koios\BlogBundle\Entity\Blog 
+     * @return Koios\BlogBackendBundle\Entity\Blog
      */
     public function getBlog()
     {

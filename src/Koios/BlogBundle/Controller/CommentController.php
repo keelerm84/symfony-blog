@@ -4,7 +4,7 @@
 namespace Koios\BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Koios\BlogBundle\Entity\Comment;
+use Koios\BlogBackendBundle\Entity\Comment;
 use Koios\BlogBundle\Form\CommentType;
 
 /**
@@ -14,59 +14,66 @@ class CommentController extends Controller
 {
     public function newAction($blog_id)
     {
-        $blog = $this->getBlog($blog_id);
-
-        $comment = new Comment();
-        $comment->setBlog($blog);
-        $form   = $this->createForm(new CommentType(), $comment);
-
         return $this->render('KoiosBlogBundle:Comment:form.html.twig', array(
-            'comment' => $comment,
-            'form'   => $form->createView()
-        ));
+                'blog_id' => $blog_id,
+                'form' => $this->getForm()->createView()
+            ));
     }
 
     public function createAction($blog_id)
     {
         $blog = $this->getBlog($blog_id);
 
-        $comment  = new Comment();
-        $comment->setBlog($blog);
         $request = $this->getRequest();
-        $form    = $this->createForm(new CommentType(), $comment);
+        $form    = $this->getForm();
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $data = $form->getData();
 
-            $em->persist($comment);
-            $em->flush();
+            $client = new \Guzzle\Service\Client();
+            try {
+                $request = $client->post('http://localhost:9900/app_dev.php/api/comment/')
+                    ->addPostFields(array(
+                            'user'    => $data['user'],
+                            'comment' => $data['comment'],
+                            'blog_id' => $blog_id
+                        ));
+                $request->send();
 
-            return $this->redirect($this->generateUrl('KoiosBlogBundle_blog_show', array(
-                'id' => $comment->getBlog()->getId(),
-                'slug' => $comment->getBlog()->getSlug())) .
-                '#comment-' . $comment->getId()
-            );
+                return $this->redirect($this->generateUrl('KoiosBlogBundle_blog_show', array(
+                            'id'   => $blog->id,
+                            'slug' => $blog->slug
+                        )));
+            } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
+                $this->get('session')->setFlash('blogger-error', $e->getMessage());
+            }
         }
 
         return $this->render('KoiosBlogBundle:Comment:create.html.twig', array(
-            'comment' => $comment,
-            'form'    => $form->createView()
-        ));
+                'title' => $blog->title,
+                'form'  => $form->createView()
+            ));
     }
 
-    protected function getBlog($blog_id)
+    protected function getForm() {
+        return $this->createFormBuilder()
+            ->add('user', 'text')
+            ->add('comment', 'textarea')
+            ->getForm();
+    }
+
+    protected function getBlog($id)
     {
-        $em = $this->getDoctrine()
-                    ->getEntityManager();
+        $client = new \Guzzle\Service\Client();
+        $req = $client->get("http://localhost:9900/app_dev.php/api/blog/{$id}");
+        $req->setHeader('Content-type', 'application/json');
+        $req->setHeader('Accept', 'application/json');
+        $response = $req->send();
 
-        $blog = $em->getRepository('KoiosBlogBundle:Blog')->find($blog_id);
+        $blog = json_decode($req->send()->getBody(true));
 
-        if (!$blog) {
-            throw $this->createNotFoundException('Unable to find Blog post.');
-        }
-
-        return $blog;
+        return $blog->blog;
     }
 
 }

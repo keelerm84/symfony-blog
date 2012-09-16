@@ -11,11 +11,16 @@ class PageController extends Controller
 {
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $client = new \Guzzle\Service\Client();
 
-        $blogs = $em->getRepository('KoiosBlogBundle:Blog')->getLatestBlogs();
+        $req = $client->get("http://localhost:9900/app_dev.php/api/blogs");
+        $req->setHeader('Content-type', 'application/json');
+        $req->setHeader('Accept', 'application/json');
 
-        return $this->render('KoiosBlogBundle:Page:index.html.twig', array('blogs' => $blogs));
+        $response = $req->send();
+        $blogs = json_decode($response->getBody(true));
+
+        return $this->render('KoiosBlogBundle:Page:index.html.twig', array('blogs' => $blogs->blogs));
     }
 
     public function aboutAction()
@@ -51,17 +56,24 @@ class PageController extends Controller
     }
 
     public function sidebarAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $client = new \Guzzle\Service\Client();
 
-        $tags           = $em->getRepository('KoiosBlogBundle:Blog')->getTags();
-        $tagWeights     = $em->getRepository('KoiosBlogBundle:Blog')->getTagWeights($tags);
-        
-        $commentLimit   = $this->container->getParameter('koios_blog.comments.latest_comment_limit');
-        $latestComments = $em->getRepository('KoiosBlogBundle:Comment')->getLatestComments($commentLimit);
+        $limit = $this->container->getParameter('koios_blog.comments.latest_comment_limit');
+        $req = $client->get("http://localhost:9900/app_dev.php/api/comments/latest/{$limit}");
+        $req->setHeader('Content-type', 'application/json');
+        $req->setHeader('Accept', 'application/json');
+
+        $comments = json_decode($req->send()->getBody(true));
+
+        $req = $client->get("http://localhost:9900/app_dev.php/api/tagWeights");
+        $req->setHeader('Content-type', 'application/json');
+        $req->setHeader('Accept', 'application/json');
+
+        $tagWeights = json_decode($req->send()->getBody(true), true);
 
         return $this->render('KoiosBlogBundle:Page:sidebar.html.twig', array(
-            'tags'           => $tagWeights,
-            'latestComments' => $latestComments
+                'tags'           => $tagWeights['weights'],
+                'latestComments' => $comments->comments
         ));
     }
 }

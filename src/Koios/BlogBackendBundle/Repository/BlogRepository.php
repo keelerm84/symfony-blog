@@ -1,6 +1,6 @@
 <?php
 
-namespace Koios\BlogBundle\Repository;
+namespace Koios\BlogBackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

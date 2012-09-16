@@ -12,101 +12,128 @@ use Koios\BlogBundle\Entity\Blog;
  */
 class AdminController extends Controller
 {
-    /**
-     * Show list of blog entries
-     * @return
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getEntityManager();
+    public function indexAction() {
+        $client = new \Guzzle\Service\Client();
 
-        $blogs = $em->getRepository('KoiosBlogBundle:Blog')->findAll();
+        $req = $client->get("http://localhost:9900/app_dev.php/api/blogs");
+        $req->setHeader('Content-type', 'application/json');
+        $req->setHeader('Accept', 'application/json');
+        $response = $req->send();
 
-        if (0 == count($blogs)) {
-            throw $this->createNotFoundException('Unable to find any Blog posts.');
-        }
+        $blogs = json_decode($req->send()->getBody(true));
 
-        return $this->render('KoiosBlogBundle:Admin:index.html.twig', array('blogs' => $blogs));
+        return $this->render('KoiosBlogBundle:Admin:index.html.twig', array('blogs' => $blogs->blogs));
     }
 
-    /**
-     * Delete a selection of blog entries
-     */
-    public function deleteAction(Request $request)
-    {
+    public function deleteAction(Request $request) {
         $blog_ids = $request->get('blogs', false);
 
-        if (is_array($blog_ids)) {
-            $em = $this->getDoctrine()->getEntityManager();
+        if(is_array($blog_ids)) {
+            $client = new \Guzzle\Service\Client();
 
-            foreach($blog_ids as $id => $value) {
-                $blog = $em->find('\Koios\BlogBundle\Entity\Blog', $id);
-                if ( null !== $blog ) {
-                    $em->remove($blog);
+            $req = $client->delete("http://localhost:9900/app_dev.php/api/admin/blogs/?" . http_build_query(array('blogs' => array_keys($blog_ids))));
+            $req->setHeader('Content-type', 'application/json');
+            $req->setHeader('Accept', 'application/json');
+            $req->setAuth('admin', 'password');
+
+            $response = $req->send();
+        }
+
+        return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
+    }
+
+    public function createAction() {
+        $request = $this->getRequest();
+        $form = $this->getForm();
+
+        if('POST' == $request->getMethod()) {
+            $form->bindRequest($request);
+
+            if($form->isValid()) {
+                $data = $form->getData();
+
+                $client = new \Guzzle\Service\Client();
+
+                try {
+                    $request = $client->post('http://localhost:9900/app_dev.php/api/admin/blog/create/')
+                        ->addPostFields(array(
+                                'title' => $data['title'],
+                                'blog'  => $data['blog'],
+                                'tags'  => $data['tags']
+                            ));
+                    $request->setAuth('admin', 'password');
+                    $request->send();
+
+                    $this->get('session')->setFlash('blogger-notice', 'Successfully created new blog entry');
+
+                    return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
+                } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
+                    $this->get('session')->setFlash('blogger-error', $e->getMessage());
+                     }
+            }
+        }
+
+        return $this->render('KoiosBlogBundle:Admin:create.html.twig', array(
+                'form'  => $form->createView()
+            ));
+    }
+
+    public function editAction($blog_id) {
+        $request = $this->getRequest();
+        $form = $this->getForm();
+
+        $client = new \Guzzle\Service\Client();
+        $req = $client->get("http://localhost:9900/app_dev.php/api/blog/{$blog_id}");
+        $req->setHeader('Content-type', 'application/json');
+        $req->setHeader('Accept', 'application/json');
+        $response = $req->send();
+
+        $blog = json_decode($req->send()->getBody(true));
+
+        if('POST' == $request->getMethod()) {
+            $form->bindRequest($request);
+
+            if($form->isValid()) {
+                $data = $form->getData();
+
+                $client = new \Guzzle\Service\Client();
+
+                try {
+                    $request = $client->put('http://localhost:9900/app_dev.php/api/admin/blog/' . $blog_id, array(),
+                               json_encode(array(
+                                       'blog' => $data['blog'],
+                                       'title' => $data['title'],
+                                       'tags' => $data['tags']
+                                   )));
+                    $request->setAuth('admin', 'password');
+                    $request->send();
+
+                    $this->get('session')->setFlash('blogger-notice', 'Successfully update blog entry');
+
+                    return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
+                } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
+                    $this->get('session')->setFlash('blogger-error', $e->getMessage());
                 }
             }
-            $em->flush();
-            $this->get('session')->setFlash('blogger-notice', 'The selected blog entries have been successfully deleted.');
-        } else {
-            $this->get('session')->setFlash('blogger-error', 'You must select at least 1 valid blog.  No blog posts were deleted.');
+        } else if ( 'GET' == $request->getMethod() ) {
+            $form->setData(array(
+                    'title' => $blog->blog->title,
+                    'blog' => $blog->blog->blog,
+                    'tags' => $blog->blog->tags
+                ));
         }
 
-        return $this->redirect($this->generateUrl('KoiosBlogBundle_admin'));
-
+        return $this->render('KoiosBlogBundle:Admin:edit.html.twig', array(
+                'form'  => $form->createView(),
+                'blog' => $blog->blog
+            ));
     }
 
-    public function createAction(Request $request) {
-        $blog = new Blog();
-
-        $form = $this->createForm(new BlogType(), $blog);
-
-        if('POST' == $request->getMethod()) {
-            $form->bindRequest($request);
-
-            if ($form->isValid()) {
-                $blog->setAuthor($this->get('security.context')->getToken()->getUser()->getUsername());
-
-                $em = $this->getDoctrine()->getEntityManager();
-                $em->persist($blog);
-                $em->flush();
-
-                $this->get('session')->setFlash('blogger-notice', 'Post create updated!');
-                return $this->redirect($this->generateUrl('KoiosBlogBundle_admin'));
-            }
-        }
-
-        return $this->render('KoiosBlogBundle:Admin:create.html.twig', array('form' => $form->createView()));
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function editAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $blog = $em->getRepository('KoiosBlogBundle:Blog')->find($request->get('id'));
-
-        if (!$blog) {
-            throw $this->createNotFoundException('Unable to find Blog post.');
-        }
-
-        $form = $this->createForm(new BlogType(), $blog);
-
-        if('POST' == $request->getMethod()) {
-            $form->bindRequest($request);
-
-            if ($form->isValid()) {
-                $em->persist($blog);
-                $em->flush();
-
-                $this->get('session')->setFlash('blogger-notice', 'Post successfully updated!');
-                return $this->redirect($this->generateUrl('KoiosBlogBundle_admin_blog_edit', array('id' => $blog->getId())));
-            }
-        }
-
-        return $this->render('KoiosBlogBundle:Admin:edit.html.twig', array('blog' => $blog, 'form' => $form->createView()));
+    protected function getForm() {
+        return $this->createFormBuilder()
+            ->add('title', 'text')
+            ->add('blog', 'ckeditor')
+            ->add('tags', 'text')
+            ->getForm();
     }
 }

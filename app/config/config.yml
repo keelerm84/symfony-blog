@@ -59,3 +59,23 @@ swiftmailer:
 jms_security_extra:
     secure_controllers:  true
     secure_all_services: false
+
+fos_rest:
+    view:
+        view_response_listener: force
+        formats:
+            rss: true
+            xml: false
+            json: true
+        templating_formats:
+            html: true
+    routing_loader:
+        default_format: json
+
+sensio_framework_extra:
+    view:    { annotations: false }
+    router:  { annotations: true }
+
+ddeboer_guzzle:
+    service_builder:
+        configuration_file: "%kernel.root_dir%/config/webservices.xml"

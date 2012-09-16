@@ -3,6 +3,16 @@
 {% block title %}Add Comment{% endblock%}
 
 {% block body %}
-    <h1>Add comment for blog post "{{ comment.blog.title }}"</h1>
+    {% if app.session.hasFlash('blogger-notice') %}
+        <div class="blogger-notice">
+            {{ app.session.flash('blogger-notice') }}
+        </div>
+    {% elseif app.session.hasFlash('blogger-error') %}
+        <div class="blogger-error">
+            {{ app.session.flash('blogger-error') }}
+        </div>
+    {% endif %}
+
+    <h1>Add comment for blog post "{{ title }}"</h1>
     {% include 'KoiosBlogBundle:Comment:form.html.twig' with { 'form': form } %}
 {% endblock %}

@@ -1,12 +1,14 @@
 <?php
 
-namespace Koios\BlogBundle\Entity;
+namespace Koios\BlogBackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\SerializerBundle\Annotation\ExclusionPolicy;
+use JMS\SerializerBundle\Annotation\Exclude;
 
 /**
- * @ORM\Entity(repositoryClass="Koios\BlogBundle\Repository\BlogRepository")
+ * @ORM\Entity(repositoryClass="Koios\BlogBackendBundle\Repository\BlogRepository")
  * @ORM\Table(name="blog")
  * @ORM\HasLifeCycleCallbacks()
  */
@@ -51,6 +53,7 @@ class Blog
 
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="blog", cascade={"persist", "remove"})
+     * @Exclude
      */
     protected $comments;
 
@@ -240,9 +243,9 @@ class Blog
     /**
      * Add comments
      *
-     * @param Koios\BlogBundle\Entity\Comment $comments
+     * @param Koios\BlogBackendBundle\Entity\Comment $comments
      */
-    public function addComment(\Koios\BlogBundle\Entity\Comment $comments)
+    public function addComment(\Koios\BlogBackendBundle\Entity\Comment $comments)
     {
         $this->comments[] = $comments;
     }

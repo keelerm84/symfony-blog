@@ -3,11 +3,17 @@
 {% block title %}{{ blog.title }}{% endblock %}
 
 {% block body %}
+<pre>
     {% if app.session.hasFlash('blogger-notice') %}
         <div class="blogger-notice">
             {{ app.session.flash('blogger-notice') }}
         </div>
+    {% elseif app.session.hasFlash('blogger-error') %}
+        <div class="blogger-error">
+            {{ app.session.flash('blogger-error') }}
+        </div>
     {% endif %}
+</pre>
 
-    {% include 'KoiosBlogBundle:Blog:form.html.twig' with { 'form': form, 'form_action': path('KoiosBlogBundle_admin_blog_edit', { 'id' : blog.id})} %}
+    {% include 'KoiosBlogBundle:Blog:form.html.twig' with { 'form': form, 'form_action': path('KoiosBlogBundle_admin_blog_edit', { 'blog_id' : blog.id})} %}
 {% endblock %}
