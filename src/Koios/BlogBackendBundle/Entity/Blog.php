@@ -42,7 +42,7 @@ class Blog
     protected $blog;
 
     /**
-     * @ORM\Column(type="string", length="20")
+     * @ORM\Column(type="string", length=20)
      */
     protected $image = 'no-image.jpg';
 

@@ -4,7 +4,6 @@
 
 [twig]
     git=http://github.com/fabpot/Twig.git
-    version=v1.8.2
 
 [monolog]
     git=http://github.com/Seldaek/monolog.git
@@ -12,15 +11,12 @@
 
 [doctrine-common]
     git=http://github.com/doctrine/common.git
-    version=2.1.4
 
 [doctrine-dbal]
     git=http://github.com/doctrine/dbal.git
-    version=2.1.7
 
 [doctrine]
     git=http://github.com/doctrine/doctrine2.git
-    version=2.1.7
 
 [swiftmailer]
     git=http://github.com/swiftmailer/swiftmailer.git
@@ -28,7 +24,6 @@
 
 [assetic]
     git=http://github.com/kriswallsmith/assetic.git
-    version=v1.0.3
 
 [twig-extensions]
     git=http://github.com/fabpot/Twig-extensions.git
@@ -40,7 +35,6 @@
 [SensioFrameworkExtraBundle]
     git=http://github.com/sensio/SensioFrameworkExtraBundle.git
     target=/bundles/Sensio/Bundle/FrameworkExtraBundle
-    version=origin/2.0
 
 [JMSSecurityExtraBundle]
     git=http://github.com/schmittjoh/JMSSecurityExtraBundle.git
@@ -50,17 +44,14 @@
 [SensioDistributionBundle]
     git=http://github.com/sensio/SensioDistributionBundle.git
     target=/bundles/Sensio/Bundle/DistributionBundle
-    version=origin/2.0
 
 [SensioGeneratorBundle]
     git=http://github.com/sensio/SensioGeneratorBundle.git
     target=/bundles/Sensio/Bundle/GeneratorBundle
-    version=origin/2.0
 
 [AsseticBundle]
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
-    version=origin/2.0
 
 [doctrine-fixtures]
     git=http://github.com/doctrine/data-fixtures.git
@@ -68,16 +59,14 @@
 
 [DoctrineFixturesBundle]
     git=http://github.com/doctrine/DoctrineFixturesBundle.git
-    target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
-    version=origin/2.0
+    target=/bundles/Doctrine/Bundle/FixturesBundle/
 
 [doctrine-migrations]
     git=http://github.com/doctrine/migrations.git
 
 [DoctrineMigrationsBundle]
     git=http://github.com/doctrine/DoctrineMigrationsBundle.git
-    target=/bundles/Symfony/Bundle/DoctrineMigrationsBundle
-    version=origin/2.0
+    target=/bundles/Doctrine/Bundle/MigrationsBundle/
 
 [IvoryCKEditorBundle]
     git=http://github.com/egeloen/IvoryCKEditorBundle.git
@@ -99,7 +88,20 @@
 [guzzle]
     git=git://github.com/guzzle/guzzle.git
     target=guzzle
+	version=origin/guzzle2
 
 [DdeboerGuzzleBundle]
     git=git://github.com/ddeboer/GuzzleBundle.git
     target=bundles/Ddeboer/GuzzleBundle
+
+[MonologBundle]
+	git=https://github.com/symfony/MonologBundle.git
+	target=/bundles/Symfony/Bundle/MonologBundle/
+
+[SwiftMailerBundle]
+	git=https://github.com/symfony/SwiftmailerBundle.git
+	target=/bundles/Symfony/Bundle/SwiftmailerBundle
+
+[DoctrineBundle]
+	git=https://github.com/doctrine/DoctrineBundle.git
+	target=/bundles/Doctrine/Bundle/DoctrineBundle
