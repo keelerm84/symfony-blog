@@ -34,26 +34,26 @@ KoiosBlogBundle_blog_show:
         id: \d+
 
 KoiosBlogBundle_comment_create:
-    pattern: /comment/{blog_id}
+    pattern: /comment/{id}
     defaults: { _controller: KoiosBlogBundle:Comment:create }
     requirements:
         _method: POST
-        blog_id: \d+
+        id: \d+
 
 KoiosBlogBundle_admin:
-    pattern: /admin/
+    pattern: /admin
     defaults: { _controller: KoiosBlogBundle:Admin:index }
     requirements:
         _method: GET
 
 KoiosBlogBundle_admin_blog_delete:
-    pattern: /admin/delete/
+    pattern: /admin/delete
     defaults: { _controller: KoiosBlogBundle:Admin:delete }
     requirements:
         _method: POST
 
 KoiosBlogBundle_admin_blog_edit:
-    pattern: /admin/edit/{blog_id}
+    pattern: /admin/edit/{id}
     defaults: { _controller: KoiosBlogBundle:Admin:edit }
     requirements:
         _method: GET|POST

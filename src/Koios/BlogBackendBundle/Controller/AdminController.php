@@ -27,13 +27,13 @@ class AdminController extends Controller {
         return $response;
     }
 
-    public function editAction($blog_id) {
+    public function editAction($id) {
         $request = $this->getRequest();
 
         $data = json_decode($request->getContent());
 
         $em = $this->getDoctrine()->getEntityManager();
-        $blog = $em->find('KoiosBlogBackendBundle:Blog', $blog_id);
+        $blog = $em->find('KoiosBlogBackendBundle:Blog', $id);
         $blog->setTitle($data->title);
         $blog->setBlog($data->blog);
         $blog->setTags($data->tags);

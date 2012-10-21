@@ -3,6 +3,7 @@
 namespace Koios\BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Guzzle\Service\Description\ServiceDescription;
 
 /**
  * Blog controller.
@@ -14,20 +15,13 @@ class BlogController extends Controller
      */
     public function showAction($id, $slug)
     {
-        $client = new \Guzzle\Service\Client();
-        $req = $client->get("http://localhost:9900/app_dev.php/api/blog/{$id}");
-        $req->setHeader('Content-type', 'application/json');
-        $req->setHeader('Accept', 'application/json');
-        $response = $req->send();
+	  $client = $this->get('backend_client');
+	  $command = $client->getCommand("GetBlog", array('id' => $id));
+	  $blog = $command->execute($command);
 
-        $blog = json_decode($req->send()->getBody(true));
+	  $command = $client->getCommand("GetBlogComments", array('id' => $id));
+	  $comments = $command->execute($command);
 
-        $req = $client->get("http://localhost:9900/app_dev.php/api/blog/{$id}/comments");
-        $req->setHeader('Content-type', 'application/json');
-        $req->setHeader('Accept', 'application/json');
-
-        $comments = json_decode($req->send()->getBody(true));
-
-        return $this->render('KoiosBlogBundle:Blog:show.html.twig', array('blog' => $blog->blog, 'comments' => $comments->comments));
+	  return $this->render('KoiosBlogBundle:Blog:show.html.twig', array('blog' => $blog, 'comments' => $comments));
     }
 }

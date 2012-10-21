@@ -14,5 +14,5 @@
     {% endif %}
 
     <h1>Add comment for blog post "{{ title }}"</h1>
-    {% include 'KoiosBlogBundle:Comment:form.html.twig' with { 'form': form } %}
+    {% include 'KoiosBlogBundle:Comment:form.html.twig' with { 'form': form, 'id' : id } %}
 {% endblock %}

@@ -1,0 +1,229 @@
+{
+    "name": "Blog",
+    "apiVersion": "2012-10-15",
+    "description": "Manipulate the blog through API calls",
+
+    "commands": {
+        "GetBlogs": {
+            "method": "GET",
+            "uri": "blogs",
+            "summary": "Retrieve all or a paginated subset of the blog entries",
+            "responseClass": "GetBlogsOutput"
+        },
+		"GetBlog": {
+			"method": "GET",
+			"uri": "blog/{id}",
+			"summary": "Retrieve the contents of one specific blog entry",
+			"responseClass": "GetBlogOutput",
+			"params": {
+				"id": {
+					"location": "uri",
+					"description": "The blog ID to retrieve",
+					"required": "true"
+				}
+			}
+		},
+		"CreateBlog": {
+			"method": "POST",
+			"uri": "admin/blog/create",
+			"summary": "Create a new blog entry",
+			"params": {
+				"title": {
+					"location": "json",
+					"type": "string",
+					"description": "The blog's title"
+				},
+				"blog": {
+					"location": "json",
+					"type": "string",
+					"description": "The text of the blog"
+				},
+				"tags": {
+					"location": "json",
+					"type": "string",
+					"description": "A comma separated string of tags"
+				}
+			}
+		},
+		"EditBlog": {
+			"method": "PUT",
+			"uri": "admin/blog/{id}",
+			"summary": "Edit an existing blog entry",
+			"params": {
+				"id": {
+					"location": "uri",
+					"description": "The blog ID to update.",
+					"required": "true"
+				},
+				"title": {
+					"location": "json",
+					"type": "string",
+					"description": "The blog's title"
+				},
+				"blog": {
+					"location": "json",
+					"type": "string",
+					"description": "The text of the blog"
+				},
+				"tags": {
+					"location": "json",
+					"type": "string",
+					"description": "A comma separated string of tags"
+				}
+			}
+		},
+		"DeleteBlogs": {
+			"method": "DELETE",
+			"uri": "admin/blogs",
+			"summary": "Delete selected blogs",
+			"params": {
+				"blogs": {
+					"location": "json",
+					"type": "array",
+					"description": "Query encoded list of ids to delete"
+				}
+			}
+		},
+		"GetBlogComments": {
+			"method": "GET",
+			"uri": "blog/{id}/comments",
+			"summary": "Retrieve all the comments for a specific blog",
+			"responseClass": "GetCommentsOutput",
+			"params": {
+				"id": {
+					"location": "uri",
+					"description": "The blog ID to retrieve",
+					"required": "true"
+				}
+			}
+		},
+		"GetComments": {
+			"method": "GET",
+			"uri": "comments/latest/{limit}",
+			"summary": "Retrieve the latest comments, with an optional limit",
+			"responseClass": "GetCommentsOutput",
+			"params": {
+				"limit": {
+					"location": "uri",
+					"description": "An optional number of comments to limit the selection to",
+					"required": "false"
+				}
+			}
+		},
+		"GetTagWeights": {
+			"method": "GET",
+			"uri": "tagWeights",
+			"summary": "Tag weights for all blog posts",
+			"responseClass": "GetTagWeightsOutput"
+		},
+		"CreateComment": {
+			"method": "POST",
+			"uri": "comment",
+			"summary": "Create a new comment for the specified blog entry",
+			"params": {
+				"user": {
+					"location": "json",
+					"type": "string",
+					"description": "The name of the user adding the comment"
+				},
+				"comment": {
+					"location": "json",
+					"type": "string",
+					"description": "The text of the comment"
+				},
+				"id": {
+					"location": "json",
+					"type": "string",
+					"description": "The blog ID to add a comment to"
+				}
+			}
+		}
+    },
+    "models": {
+        "GetBlogsOutput": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "location": "json",
+                        "type": "string"
+                    },
+                    "blog": {
+                        "location": "json",
+                        "type": "string"
+                    },
+                    "slug": {
+                        "location": "json",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+		"GetCommentsOutput": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"tags": {
+						"location": "json",
+						"type": "string"
+					},
+					"user": {
+						"location": "json",
+						"type": "string"
+					},
+					"created": {
+						"location": "json",
+						"type": "string"
+					},
+					"comment": {
+						"location": "json",
+						"type": "string"
+					}
+				}
+			}
+		},
+		"GetBlogOutput": {
+			"type": "object",
+			"properties": {
+				"created": {
+					"location": "json",
+					"type": "string"
+				},
+				"title": {
+					"location": "json",
+					"type": "string"
+				},
+				"image": {
+					"location": "json",
+					"type": "string"
+				},
+				"blog": {
+					"location": "json",
+					"type": "string"
+				},
+				"slug": {
+					"location": "json",
+					"type": "string"
+				}
+			}
+		},
+		"GetTagWeightsOutput": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"tag": {
+						"location": "json",
+						"type": "string"
+					},
+					"weight": {
+						"location": "json",
+						"type": "string"
+					}
+				}
+			}
+		}
+    }
+}

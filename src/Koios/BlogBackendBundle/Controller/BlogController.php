@@ -7,7 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Koios\BlogBackendBundle\Entity\Blog;
 use Koios\BlogBackendBundle\Entity\Comment;
-use FOS\RestBundle\Util\Codes;
+use FOS\Rest\Util\Codes;
+use Guzzle\Http\Message\Response;
 
 class BlogController extends Controller {
 
@@ -17,44 +18,36 @@ class BlogController extends Controller {
     public function getBlogsAction($page = 1, $per_page = 25) {
         $em = $this->getDoctrine()->getEntityManager();
         $offset = ($page - 1) * $per_page;
-        $blogs = $em->getRepository('KoiosBlogBackendBundle:Blog')->findBy(array(), array('created' => 'DESC'), $per_page, $offset);
-
-        return array('blogs' => $blogs);
+        return $em->getRepository('KoiosBlogBackendBundle:Blog')->findBy(array(), array('created' => 'DESC'), $per_page, $offset);
     }
 
     /**
      * @Rest\View
      */
-    public function getBlogAction($blog_id) {
+    public function getBlogAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
-        $blog = $em->find('KoiosBlogBackendBundle:Blog', $blog_id);
-
-        if (!$blog instanceof Blog ) {
-            throw new NotFoundHttpException(var_dump($blog));
-        }
-
-        return array('blog' => $blog);
+        return $em->find('KoiosBlogBackendBundle:Blog', $id);
     }
 
     /**
      * @Rest\View
      */
-    public function getCommentsAction($blog_id) {
+    public function getCommentsAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
-        $blog = $em->find('KoiosBlogBackendBundle:Blog', $blog_id);
+        $blog = $em->find('KoiosBlogBackendBundle:Blog', $id);
 
         if (!$blog instanceof Blog ) {
-            throw new NotFoundHttpException(var_dump($blog));
+            throw new NotFoundHttpException("Not an instance of blog");
         }
 
-        return array('comments' => $blog->getComments());
+		return $em->getRepository('KoiosBlogBackendBundle:Comment')->getLatestComments(null);
     }
 
     public function postBlogCommentAction() {
         $request = $this->getRequest();
 
         $comment = new Comment();
-        $comment->setBlog($this->getBlogAction($request->get('blog_id'))['blog']);
+        $comment->setBlog($this->getBlogAction($request->get('id')));
         $comment->setUser($request->get('user'));
         $comment->setComment($request->get('comment'));
 
@@ -62,8 +55,7 @@ class BlogController extends Controller {
         $em->persist($comment);
         $em->flush();
 
-        $response = new Response();
-        $response->setStatusCode(Codes::HTTP_CREATED);
+        new Response(Codes::HTTP_CREATED);
     }
 
     /**
@@ -71,9 +63,7 @@ class BlogController extends Controller {
      */
     public function getLatestCommentsAction($limit) {
         $em = $this->getDoctrine()->getEntityManager();
-        $latestComments = $em->getRepository('KoiosBlogBackendBundle:Comment')->getLatestComments($limit);
-
-        return array('comments' => $latestComments);
+        return $em->getRepository('KoiosBlogBackendBundle:Comment')->getLatestComments($limit);
     }
 
     /**
@@ -82,8 +72,6 @@ class BlogController extends Controller {
     public function getTagWeightsAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $tags = $em->getRepository('KoiosBlogBackendBundle:Blog')->getTags();
-        $tagWeights = $em->getRepository('KoiosBlogBackendBundle:Blog')->getTagWeights($tags);
-
-        return array('weights' => $tagWeights);
+        return $em->getRepository('KoiosBlogBackendBundle:Blog')->getTagWeights($tags);
     }
 }

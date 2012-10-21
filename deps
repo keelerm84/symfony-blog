@@ -44,10 +44,12 @@
 [SensioDistributionBundle]
     git=http://github.com/sensio/SensioDistributionBundle.git
     target=/bundles/Sensio/Bundle/DistributionBundle
+	version=origin/2.1
 
 [SensioGeneratorBundle]
     git=http://github.com/sensio/SensioGeneratorBundle.git
     target=/bundles/Sensio/Bundle/GeneratorBundle
+	version=origin/2.1
 
 [AsseticBundle]
     git=http://github.com/symfony/AsseticBundle.git
@@ -71,7 +73,6 @@
 [IvoryCKEditorBundle]
     git=http://github.com/egeloen/IvoryCKEditorBundle.git
     target=/bundles/Ivory/CKEditorBundle
-    version=origin/2.0
 
 [FOSRest]
     git=git://github.com/FriendsOfSymfony/FOSRest.git

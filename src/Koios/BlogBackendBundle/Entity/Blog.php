@@ -68,7 +68,7 @@ class Blog
     protected $updated;
 
     public function __construct() {
-        $this->comments = new ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
 
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());
@@ -253,7 +253,7 @@ class Blog
     /**
      * Get comments
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Doctrine\Common\Collections\ArrayCollection
      */
     public function getComments()
     {

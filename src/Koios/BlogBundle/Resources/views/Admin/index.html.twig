@@ -31,7 +31,7 @@
     {% for blog in blogs %}
             <tr>
                 <td><input type="checkbox" name="blogs[{{ blog.id }}]" /></td>
-                <td><a href="{{ path('KoiosBlogBundle_admin_blog_edit', { 'blog_id': blog.id }) }}">{{ blog.title }}</a></td>
+                <td><a href="{{ path('KoiosBlogBundle_admin_blog_edit', { 'id': blog.id }) }}">{{ blog.title }}</a></td>
                 <td>{{ blog.author }}</td>
                 <td>{{ blog.created|date("m/d/Y") }}</td>
                 <td>{{ blog.updated|date("m/d/Y")}}</td>

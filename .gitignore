@@ -7,4 +7,5 @@ app/config/parameters.ini
 app/phpunit.xml
 tags
 TAGS
+deps.lock
 

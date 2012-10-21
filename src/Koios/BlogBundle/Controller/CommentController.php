@@ -12,17 +12,17 @@ use Koios\BlogBundle\Form\CommentType;
  */
 class CommentController extends Controller
 {
-    public function newAction($blog_id)
+    public function newAction($id)
     {
         return $this->render('KoiosBlogBundle:Comment:form.html.twig', array(
-                'blog_id' => $blog_id,
+                'id' => $id,
                 'form' => $this->getForm()->createView()
             ));
     }
 
-    public function createAction($blog_id)
+    public function createAction($id)
     {
-        $blog = $this->getBlog($blog_id);
+        $blog = $this->getBlog($id);
 
         $request = $this->getRequest();
         $form    = $this->getForm();
@@ -31,19 +31,14 @@ class CommentController extends Controller
         if ($form->isValid()) {
             $data = $form->getData();
 
-            $client = new \Guzzle\Service\Client();
+            $client = $this->get('backend_client');
             try {
-                $request = $client->post('http://localhost:9900/app_dev.php/api/comment/')
-                    ->addPostFields(array(
-                            'user'    => $data['user'],
-                            'comment' => $data['comment'],
-                            'blog_id' => $blog_id
-                        ));
-                $request->send();
+			  $command = $client->getCommand("CreateComment", array('user' => $data['user'], 'comment' => $data['comment'], 'id' => $id));
+			  $client->execute($command);
 
                 return $this->redirect($this->generateUrl('KoiosBlogBundle_blog_show', array(
-                            'id'   => $blog->id,
-                            'slug' => $blog->slug
+                            'id'   => $id,
+                            'slug' => $blog['slug']
                         )));
             } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
                 $this->get('session')->setFlash('blogger-error', $e->getMessage());
@@ -51,7 +46,8 @@ class CommentController extends Controller
         }
 
         return $this->render('KoiosBlogBundle:Comment:create.html.twig', array(
-                'title' => $blog->title,
+                'title' => $blog['title'],
+				'id' => $id,
                 'form'  => $form->createView()
             ));
     }
@@ -65,15 +61,10 @@ class CommentController extends Controller
 
     protected function getBlog($id)
     {
-        $client = new \Guzzle\Service\Client();
-        $req = $client->get("http://localhost:9900/app_dev.php/api/blog/{$id}");
-        $req->setHeader('Content-type', 'application/json');
-        $req->setHeader('Accept', 'application/json');
-        $response = $req->send();
+	  $client = $this->get('backend_client');
+	  $command = $client->getCommand("GetBlog", array('id' => $id));
+	  $blog = $client->execute($command);
 
-        $blog = json_decode($req->send()->getBody(true));
-
-        return $blog->blog;
+	  return $blog;
     }
-
 }

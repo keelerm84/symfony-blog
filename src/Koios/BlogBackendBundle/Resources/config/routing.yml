@@ -7,39 +7,39 @@ KoiosBlogBackendBundle_blogs:
         per_page: \d+
 
 KoiosBlogBackendBundle_blog:
-    pattern: /blog/{blog_id}
+    pattern: /blog/{id}
     defaults: { _controller: KoiosBlogBackendBundle:Blog:getBlog }
     requirements:
         _method: GET
-        blog_id: \d+
+        id: \d+
 
 KoiosBlogBackendBundle_edit_blog:
-    pattern: /admin/blog/{blog_id}
+    pattern: /admin/blog/{id}
     defaults: { _controller: KoiosBlogBackendBundle:Admin:edit }
     requirements:
         _method: PUT
-        blog_id: \d+
+        id: \d+
 
 KoiosBlogBackendBundle_create_blog:
-    pattern: /admin/blog/create/
+    pattern: /admin/blog/create
     defaults: { _controller: KoiosBlogBackendBundle:Admin:create }
     requirements:
         _method: POST
 
 KoiosBlogBackendBundle_delete_blog:
-    pattern: /admin/blogs/
+    pattern: /admin/blogs
     defaults: { _controller: KoiosBlogBackendBundle:Admin:delete }
     requirements:
         _method: DELETE
 
 KoiosBlogBackendBundle_comments:
-    pattern: /blog/{blog_id}/comments
+    pattern: /blog/{id}/comments
     defaults: { _controller: KoiosBlogBackendBundle:Blog:getComments }
     requirements:
         _method: GET
 
 KoiosBlogBackendBundle_create_comments:
-    pattern: /comment/
+    pattern: /comment
     defaults: { _controller: KoiosBlogBackendBundle:Blog:postBlogComment }
     requirements:
         _method: POST
