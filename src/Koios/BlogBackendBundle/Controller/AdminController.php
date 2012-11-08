@@ -37,6 +37,7 @@ class AdminController extends Controller {
         $blog->setTitle($data->title);
         $blog->setBlog($data->blog);
         $blog->setTags($data->tags);
+        $blog->setUpdated(new \DateTime());
 
         $em->persist($blog);
         $em->flush();

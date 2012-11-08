@@ -11,16 +11,26 @@ class PageController extends Controller
 {
     public function indexAction()
     {
-	  $client = $this->get('backend_client');
-	  $command = $client->getCommand('GetBlogs');
-	  $blogs = $client->execute($command);
+        $client = $this->get('backend_client');
+        $command = $client->getCommand('GetBlogs');
+        $blogs = $client->execute($command);
 
-	  return $this->render('KoiosBlogBundle:Page:index.html.twig', array('blogs' => $blogs));
+        $response = $this->render('KoiosBlogBundle:Page:index.html.twig', array('blogs' => $blogs));
+        $response->setPublic();
+        $response->setMaxAge(90);
+        $response->setSharedMaxAge(90);
+
+        return $response;
     }
 
     public function aboutAction()
     {
-        return $this->render('KoiosBlogBundle:Page:about.html.twig');
+        $response = $this->render('KoiosBlogBundle:Page:about.html.twig');
+        $response->setPublic();
+        $response->setMaxAge(86400);
+        $response->setSharedMaxAge(86400);
+
+        return $response;
     }
 
     public function contactAction()
@@ -51,15 +61,20 @@ class PageController extends Controller
     }
 
     public function sidebarAction() {
-	  $client = $this->get('backend_client');
-	  $command = $client->getCommand('GetComments', array('limit' => $this->container->getParameter('koios_blog.comments.latest_comment_limit')));
-	  $comments = $client->execute($command);
+        $client = $this->get('backend_client');
+        $command = $client->getCommand('GetComments', array('limit' => $this->container->getParameter('koios_blog.comments.latest_comment_limit')));
+        $comments = $client->execute($command);
 
-	  $command = $client->getCommand('GetTagWeights');
-	  $tagWeights = $client->execute($command);
+        $command = $client->getCommand('GetTagWeights');
+        $tagWeights = $client->execute($command);
 
-        return $this->render('KoiosBlogBundle:Page:sidebar.html.twig', array(
-                'tags'           => $tagWeights,
-                'latestComments' => $comments));
-	}
+        $response = $this->render('KoiosBlogBundle:Page:sidebar.html.twig', array(
+            'tags'           => $tagWeights,
+            'latestComments' => $comments));
+        $response->setPublic();
+        $response->setMaxAge(90);
+        $response->setSharedMaxAge(90);
+
+        return $response;
+    }
 }
