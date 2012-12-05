@@ -31,9 +31,6 @@ class BlogController extends Controller {
 
         $lastModified = $this->getBlogLastModified($id);
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $blog = $em->find('KoiosBlogBackendBundle:Blog', $id);
-
         $response = new SymResponse();
         $response->setLastModified($lastModified);
         $response->setPublic();
@@ -41,6 +38,9 @@ class BlogController extends Controller {
         if ( $response->isNotModified($this->getRequest())) {
             return $response;
         }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $blog = $em->find('KoiosBlogBackendBundle:Blog', $id);
 
         $view = View::create()
                  ->setStatusCode(200)
@@ -119,9 +119,9 @@ class BlogController extends Controller {
      * @Rest\View
      */
     public function getTagWeightsAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $tags = $em->getRepository('KoiosBlogBackendBundle:Blog')->getTags();
-        return $em->getRepository('KoiosBlogBackendBundle:Blog')->getTagWeights($tags);
+        $repo = $this->getDoctrine()->getEntityManager()->getRepository('KoiosBlogBackendBundle:Blog');
+        $tags = $repo->getTags();
+        return $repo->getTagWeights($tags);
     }
     protected function getBlogLastModified($id) {
         $em = $this->getDoctrine()->getEntityManager();

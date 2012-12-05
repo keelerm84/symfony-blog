@@ -9,7 +9,7 @@
         </div>
     {% elseif app.session.hasFlash('blogger-error') %}
         <div class="blogger-error">
-            {{ app.session.flash('blogger-error') }}
+            {{ app.session.flash('blogger-error')|raw }}
         </div>
     {% endif %}
 
