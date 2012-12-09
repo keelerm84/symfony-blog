@@ -49,9 +49,11 @@ class AdminController extends Controller
 
               return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
           } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
+              $this->get('logger')->err($e->getMessage());
               $error = '<ul>' . implode('</li><li>', json_decode($e->getResponse()->getBody(true))) . '</ul>';
               $this->get('session')->setFlash('blogger-error', $error);
           } catch ( \Exception $e) {
+              $this->get('logger')->err($e->getMessage());
               $this->get('session')->setFlash('blogger-error', 'An unknown error occurred.');
           }
       }
@@ -84,8 +86,12 @@ class AdminController extends Controller
 
             return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
           } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
+            $this->get('logger')->err($e->getMessage());
             $error = '<ul>' . implode('</li><li>', json_decode($e->getResponse()->getBody(true))) . '</ul>';
             $this->get('session')->setFlash('blogger-error', $error);
+          } catch ( \Exception $e ) {
+              $this->get('logger')->err($e->getMessage());
+              $this->get('session')->setFlash('blogger-error', 'An unknown error occurred.');
           }
         }
       } else if ( 'GET' == $request->getMethod() ) {
