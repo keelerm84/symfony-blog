@@ -12,10 +12,9 @@ class PageController extends Controller
     public function indexAction()
     {
         $client = $this->get('backend_client');
-        $command = $client->getCommand('GetBlogs');
-        $blogs = $client->execute($command);
+        $blogs = $client->getBlogs();
 
-        $response = $this->render('KoiosBlogBundle:Page:index.html.twig', array('blogs' => $blogs));
+        $response = $this->render('KoiosBlogBundle:Page:index.html.twig', array('blogs' => $blogs['blogs']));
         $response->setPublic();
         $response->setMaxAge(90);
         $response->setSharedMaxAge(90);
@@ -62,15 +61,12 @@ class PageController extends Controller
 
     public function sidebarAction() {
         $client = $this->get('backend_client');
-        $command = $client->getCommand('GetComments', array('limit' => $this->container->getParameter('koios_blog.comments.latest_comment_limit')));
-        $comments = $client->execute($command);
-
-        $command = $client->getCommand('GetTagWeights');
-        $tagWeights = $client->execute($command);
+        $comments = $client->getComments($this->container->getParameter('koios_blog.comments.latest_comment_limit'));
+        $tagWeights = $client->getTagWeights();
 
         $response = $this->render('KoiosBlogBundle:Page:sidebar.html.twig', array(
-            'tags'           => $tagWeights,
-            'latestComments' => $comments));
+            'tags'           => $tagWeights['weights'],
+            'latestComments' => $comments['comments']));
         $response->setPublic();
         $response->setMaxAge(90);
         $response->setSharedMaxAge(90);

@@ -14,10 +14,9 @@ class AdminController extends Controller
 {
     public function indexAction() {
         $client = $this->get('backend_client');
-        $command = $client->getCommand("GetBlogs");
-        $blogs = $client->execute($command);
+        $blogs = $client->getBlogs();
 
-        return $this->render('KoiosBlogBundle:Admin:index.html.twig', array('blogs' => $blogs));
+        return $this->render('KoiosBlogBundle:Admin:index.html.twig', array('blogs' => $blogs['blogs']));
     }
 
     public function deleteAction(Request $request) {
@@ -25,10 +24,8 @@ class AdminController extends Controller
 
         if(is_array($ids)) {
             $client = $this->get('backend_client');
-            $command = $client->getCommand("DeleteBlogs", array(
-                           'blogs' => array_keys($ids),
-                           'headers' => array('Authorization' => 'Basic ' . base64_encode('admin:password'))));
-            $client->execute($command);
+            $client->setAuthentication($this->getApiUsername(), $this->getApiPassword());
+            $client->deleteBlogs(array_keys($ids));
         }
 
         return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
@@ -40,26 +37,22 @@ class AdminController extends Controller
 
       if('POST' == $request->getMethod()) {
           $client = $this->get('backend_client');
+          $client->setAuthentication($this->getApiUsername(), $this->getApiPassword());
 
           $form->bindRequest($request);
           $data = $form->getData();
-          $data['headers'] = array('Authorization' => 'Basic ' . base64_encode('admin:password'));
-
-          $command = $client->getCommand("CreateBlog", $data);
 
           try {
-            $client->execute($command);
+              $client->createBlog($data);
 
-            $commentsModified = strtotime($command->getResponse()->getLastModified());
+              $this->get('session')->setFlash('blogger-notice', 'Successfully created new blog entry');
 
-            $this->get('session')->setFlash('blogger-notice', 'Successfully created new blog entry');
-
-            return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
+              return $this->redirect($this->generateUrl('KoiosBlogBundle_admin', array()));
           } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
-            $error = '<ul>' . implode('</li><li>', json_decode($e->getResponse()->getBody(true))) . '</ul>';
-            $this->get('session')->setFlash('blogger-error', $error);
+              $error = '<ul>' . implode('</li><li>', json_decode($e->getResponse()->getBody(true))) . '</ul>';
+              $this->get('session')->setFlash('blogger-error', $error);
           } catch ( \Exception $e) {
-            $this->get('session')->setFlash('blogger-error', 'An unknown error occurred.');
+              $this->get('session')->setFlash('blogger-error', 'An unknown error occurred.');
           }
       }
 
@@ -71,8 +64,8 @@ class AdminController extends Controller
       $form = $this->getForm();
 
       $client = $this->get('backend_client');
-      $command = $client->getCommand("GetBlog", array('id' => $id));
-      $blog = $command->execute($command);
+      $client->setAuthentication($this->getApiUsername(), $this->getApiPassword());
+      $blog = $client->getBlog($id);
 
       if('POST' == $request->getMethod()) {
         $form->bindRequest($request);
@@ -80,16 +73,12 @@ class AdminController extends Controller
         if($form->isValid()) {
           $data = $form->getData();
 
-          $command = $client->getCommand("EditBlog", array(
-                                'id'      => $id,
+          try {
+              $client->editBlog($id, array(
                                 'blog'    => $data['blog'],
                                 'title'   => $data['title'],
-                                'tags'    => $data['tags'],
-                                'headers' => array('Authorization' => 'Basic ' . base64_encode('admin:password'))
-                            ));
-
-          try {
-            $client->execute($command);
+                                'tags'    => $data['tags']
+                  ));
 
             $this->get('session')->setFlash('blogger-notice', 'Successfully update blog entry');
 
@@ -101,15 +90,15 @@ class AdminController extends Controller
         }
       } else if ( 'GET' == $request->getMethod() ) {
         $form->setData(array(
-                    'title' => $blog['title'],
-                    'blog' => $blog['blog'],
-                    'tags' => $blog['tags']
+                    'title' => $blog['blog']['title'],
+                    'blog'  => $blog['blog']['blog'],
+                    'tags'  => $blog['blog']['tags']
                 ));
       }
 
       return $this->render('KoiosBlogBundle:Admin:edit.html.twig', array(
                 'form'  => $form->createView(),
-                'blog' => $blog
+                'blog' => $blog['blog']
             ));
     }
 
@@ -119,5 +108,13 @@ class AdminController extends Controller
             ->add('blog', 'ckeditor')
             ->add('tags', 'text')
             ->getForm();
+    }
+
+    protected function getApiUsername() {
+       return $this->container->getParameter('koios_blog.api.admin_username');
+    }
+
+    protected function getApiPassword() {
+        return $this->container->getParameter('koios_blog.api.admin_password');
     }
 }

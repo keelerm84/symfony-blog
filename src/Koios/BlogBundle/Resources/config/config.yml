@@ -1,8 +1,14 @@
 parameters:
     koios_blog.emails.contact_email: contact@gmail.com
     koios_blog.comments.latest_comment_limit: 10
+    koios_blog.api.admin_username: admin
+    koios_blog.api.admin_password: password
 
 services:
-    backend_client:
-        class: Koios\BlogBundle\Services\BlogBackendClient
+    guzzle_client:
+        class: Koios\BlogBundle\Services\GuzzleClient
         arguments: ["%kernel.root_dir%/../src/Koios/BlogBundle/Resources/config/blog_api.json", "http://localhost:9900/app_dev.php/api"]
+
+    backend_client:
+        class: Koios\BlogBundle\Services\GuzzleBlogClient
+        arguments: [@guzzle_client]

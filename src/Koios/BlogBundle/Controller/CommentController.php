@@ -22,7 +22,8 @@ class CommentController extends Controller
 
     public function createAction($id)
     {
-        $blog = $this->getBlog($id);
+        $client = $this->get('backend_client');
+        $blog = $client->getBlog($id);
 
         $request = $this->getRequest();
         $form    = $this->getForm();
@@ -31,14 +32,12 @@ class CommentController extends Controller
         if ($form->isValid()) {
             $data = $form->getData();
 
-            $client = $this->get('backend_client');
             try {
-			  $command = $client->getCommand("CreateComment", array('user' => $data['user'], 'comment' => $data['comment'], 'id' => $id));
-			  $client->execute($command);
+                $client->createComment($data['user'], $data['comment'], $id);
 
                 return $this->redirect($this->generateUrl('KoiosBlogBundle_blog_show', array(
                             'id'   => $id,
-                            'slug' => $blog['slug']
+                            'slug' => $blog['blog']['slug']
                         )));
             } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
                 $this->get('session')->setFlash('blogger-error', $e->getMessage());
@@ -46,8 +45,8 @@ class CommentController extends Controller
         }
 
         return $this->render('KoiosBlogBundle:Comment:create.html.twig', array(
-                'title' => $blog['title'],
-				'id' => $id,
+                'title' => $blog['blog']['title'],
+				'id'    => $id,
                 'form'  => $form->createView()
             ));
     }
@@ -57,14 +56,5 @@ class CommentController extends Controller
             ->add('user', 'text')
             ->add('comment', 'textarea')
             ->getForm();
-    }
-
-    protected function getBlog($id)
-    {
-	  $client = $this->get('backend_client');
-	  $command = $client->getCommand("GetBlog", array('id' => $id));
-	  $blog = $client->execute($command);
-
-	  return $blog;
     }
 }

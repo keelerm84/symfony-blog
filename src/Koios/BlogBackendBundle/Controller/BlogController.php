@@ -46,7 +46,6 @@ class BlogController extends Controller {
                  ->setStatusCode(200)
                  ->setData($blog);
 
-
         return $this->get('fos_rest.view_handler')->handle($view, $this->getRequest(), $response);
     }
 
@@ -80,12 +79,14 @@ class BlogController extends Controller {
     public function postBlogCommentAction() {
         $request = $this->getRequest();
 
+        $em = $this->getDoctrine()->getEntityManager();
+        $blog = $em->find('KoiosBlogBackendBundle:Blog', $request->get('id'));
+
         $comment = new Comment();
-        $comment->setBlog($this->getBlogAction($request->get('id')));
+        $comment->setBlog($blog);
         $comment->setUser($request->get('user'));
         $comment->setComment($request->get('comment'));
 
-        $em = $this->getDoctrine()->getEntityManager();
         $em->persist($comment);
         $em->flush();
 
