@@ -1,11 +1,11 @@
 <?php
 
-namespace Koios\BlogBundle\DataFixtures\ORM;
+namespace Koios\BlogBackendBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Koios\BlogBundle\Entity\Blog;
+use Koios\BlogBackendBundle\Entity\Blog;
 
 class BlogFixtures extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -73,5 +73,4 @@ class BlogFixtures extends AbstractFixture implements OrderedFixtureInterface
     public function getOrder() {
         return 1;
     }
-
 }

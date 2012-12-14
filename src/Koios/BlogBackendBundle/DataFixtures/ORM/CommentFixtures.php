@@ -1,13 +1,12 @@
 <?php
-// src/Koios/BlogBundle/DataFixtures/ORM/CommentFixtures.php
 
-namespace Koios\BlogBundle\DataFixtures\ORM;
+namespace Koios\BlogBackendBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Koios\BlogBundle\Entity\Comment;
-use Koios\BlogBundle\Entity\Blog;
+use Koios\BlogBackendBundle\Entity\Comment;
+use Koios\BlogBackendBundle\Entity\Blog;
 
 class CommentFixtures extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -17,6 +16,7 @@ class CommentFixtures extends AbstractFixture implements OrderedFixtureInterface
         $comment->setUser('symfony');
         $comment->setComment('To make a long story short. You can\'t go wrong by choosing Symfony! And no one has ever been fired for using Symfony.');
         $comment->setBlog($manager->merge($this->getReference('blog-1')));
+        $comment->setApproved(false);
         $manager->persist($comment);
 
         $comment = new Comment();

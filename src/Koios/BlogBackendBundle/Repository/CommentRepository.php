@@ -20,12 +20,12 @@ class CommentRepository extends EntityRepository
         ->addOrderBy('c.created')
         ->setParameter('blog_id', $blogId);
 
-        if (false === is_null($approved))
+        if (false === is_null($approved)) {
             $qb->andWhere('c.approved = :approved')
-        ->setParameter('approved', $approved);
+                ->setParameter('approved', $approved ? 1 : 0);
+        }
 
-        return $qb->getQuery()
-        ->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     public function getLatestComments($limit = 10) {
@@ -33,10 +33,12 @@ class CommentRepository extends EntityRepository
             ->select('c')
             ->addOrderBy('c.id', 'DESC');
 
+        $results = $qb->getQuery()->getResult();
+
         if (false === is_null($limit)) {
-            $qb->setMaxResults($limit);
+            array_splice($results, $limit);
         }
 
-        return $qb->getQuery()->getResult();
+        return $results;
     }
 }

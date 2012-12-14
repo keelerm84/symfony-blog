@@ -18,11 +18,13 @@ class BlogRepository extends EntityRepository
             ->leftJoin('b.comments', 'c')
             ->addOrderBy('b.created', 'DESC');
 
+        $results = $qb->getQuery()->getResult();
+
         if ( false === is_null($limit) ) {
-            $qb->setMaxResults($limit);
+            array_splice($results, $limit);
         }
 
-        return $qb->getQuery()->getResult();
+        return $results;
     }
 
     public function getTags() {

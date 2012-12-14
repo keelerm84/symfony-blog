@@ -19,7 +19,7 @@ class Blog
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected $id = null;
 
     /**
      * @ORM\Column(type="string")
@@ -68,7 +68,7 @@ class Blog
     protected $updated;
 
     public function __construct() {
-        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new ArrayCollection();
 
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());

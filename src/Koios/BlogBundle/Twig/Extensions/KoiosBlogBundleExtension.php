@@ -13,6 +13,10 @@ class KoiosBlogBundleExtension extends \Twig_Extension
 
     public function createdAgo($date)
     {
+        if ( ! is_string($date) ) {
+            throw new \InvalidArgumentException("The provided date must be string.");
+        }
+
         $dateTime = new \DateTime($date);
         $delta = time() - $dateTime->getTimestamp();
         if ($delta < 0)

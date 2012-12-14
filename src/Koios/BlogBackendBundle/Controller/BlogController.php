@@ -66,7 +66,7 @@ class BlogController extends Controller {
             return $response;
         }
 
-        $comments = $em->getRepository('KoiosBlogBackendBundle:Comment')->getLatestComments(null);
+        $comments = $em->getRepository('KoiosBlogBackendBundle:Comment')->getCommentsForBlog($id, null);
 
         $view = View::create()
                  ->setStatusCode(200)
@@ -124,6 +124,7 @@ class BlogController extends Controller {
         $tags = $repo->getTags();
         return $repo->getTagWeights($tags);
     }
+
     protected function getBlogLastModified($id) {
         $em = $this->getDoctrine()->getEntityManager();
         $blog = $em->find('KoiosBlogBackendBundle:Blog', $id);

@@ -191,6 +191,7 @@ class Comment
     public function setBlog(\Koios\BlogBackendBundle\Entity\Blog $blog)
     {
         $this->blog = $blog;
+        $this->blog->addComment($this);
     }
 
     /**
