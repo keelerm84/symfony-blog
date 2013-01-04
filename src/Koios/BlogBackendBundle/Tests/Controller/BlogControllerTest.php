@@ -91,7 +91,7 @@ class BlogControllerTest extends WebTestCase {
             '!trusting', 'symblog'
         );
 
-        $this->assertTrue(0 == count(array_diff($tags, array_keys($content))));
+        $this->assertCount(0, array_diff($tags, array_keys($content)));
     }
 
     public function testPostBlogComment() {

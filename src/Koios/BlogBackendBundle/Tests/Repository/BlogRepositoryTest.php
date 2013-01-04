@@ -32,7 +32,7 @@ class BlogRepositoryTest extends WebTestCase
 
         $expected_tags = array('symfony2', 'php', 'misdirection', '!trusting');
 
-        $this->assertTrue(count($expected_tags) == count(array_intersect($tags, $expected_tags)));
+        $this->assertEquals(count($expected_tags), count(array_intersect($tags, $expected_tags)));
     }
 
     /**

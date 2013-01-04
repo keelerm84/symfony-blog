@@ -25,10 +25,6 @@ class AdminControllerTest extends WebTestCase {
         restoreDatabase();
     }
 
-    public function testTests() {
-        $this->assertTrue(true);
-    }
-
     public function testCreateBlog() {
         $data = array('title' => 'Title', 'blog'  => 'Here is a blog', 'tags'  => 'test, symfony');
 
@@ -38,16 +34,16 @@ class AdminControllerTest extends WebTestCase {
             json_encode($data)
         );
 
-        echo $this->client->getResponse()->getContent();
-
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
     }
 
     public function testCreateBlogWithMissingFields() {
         $this->client->request('POST', $this->router->generate('KoiosBlogBackendBundle_create_blog'), array(), array());
 
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(count(json_decode($this->client->getResponse()->getContent(), true)), 3);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals(count(json_decode($response->getContent(), true)), 3);
     }
 
     public function testCreateBlogWithLongTitle() {

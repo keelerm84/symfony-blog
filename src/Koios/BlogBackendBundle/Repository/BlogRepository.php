@@ -20,7 +20,7 @@ class BlogRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult();
 
-        if ( false === is_null($limit) ) {
+        if ( null !== $limit ) {
             array_splice($results, $limit);
         }
 

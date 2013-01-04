@@ -5,14 +5,21 @@ namespace Koios\BlogBackendBundle\Tests\Entity;
 use Koios\BlogBackendBundle\Entity\Blog;
 
 class BlogTest extends \PHPUnit_Framework_TestCase {
-    public function testSlugify() {
+    /**
+     * @dataProvider slugifyProvider
+     */
+    public function testSlugify($slug, $title) {
         $blog = new Blog();
+        $this->assertEquals($slug, $blog->slugify($title));
+    }
 
-        $this->assertEquals('hello-world', $blog->slugify('Hello World'));
-        $this->assertEquals('a-day-with-symfony2', $blog->slugify('A Day With Symfony2'));
-        $this->assertEquals('hello-world', $blog->slugify('Hello    world'));
-        $this->assertEquals('symblog', $blog->slugify('symblog '));
-        $this->assertEquals('symblog', $blog->slugify(' symblog'));
+    public function slugifyProvider() {
+        return array(
+            array('hello-world', 'Hello World'),
+            array('a-day-with-symfony2', 'A Day With Symfony2'),
+            array('hello-world', 'Hello    world'),
+            array('symblog', 'symblog ')
+        );
     }
 
     public function testSetSlug() {
@@ -76,8 +83,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase {
         $blog->setUpdated($dateTime);
         $this->assertEquals($dateTime, $blog->getUpdated());
 
-        $dateTime = new \DateTime();
-        $blog->setUpdatedValue($dateTime);
-        $this->assertEquals($dateTime, $blog->getUpdated());
+        $blog->setUpdatedValue();
+        $this->assertNotSame($dateTime, $blog->getUpdated());
     }
 }
