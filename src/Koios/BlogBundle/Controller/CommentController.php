@@ -40,7 +40,6 @@ class CommentController extends Controller
                             'slug' => $blog['blog']['slug']
                         )));
             } catch ( \Guzzle\Http\Exception\BadResponseException $e) {
-                $this->get('logger')->err($e->getMessage());
                 $this->get('session')->setFlash('blogger-error', $e->getMessage());
             }
         }

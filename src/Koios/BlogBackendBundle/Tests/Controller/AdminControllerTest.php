@@ -2,10 +2,10 @@
 
 namespace Koios\BlogBackendBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Koios\BlogTestCase;
 use Koios\BlogBackendBundle\Controller\AdminController;
 
-class AdminControllerTest extends WebTestCase {
+class AdminControllerTest extends BlogTestCase {
     protected $client;
     protected $router;
 
@@ -19,10 +19,6 @@ class AdminControllerTest extends WebTestCase {
         );
         $this->client = static::createClient(array(), $headers);
         $this->router = static::$kernel->getContainer()->get('router');
-    }
-
-    public function tearDown() {
-        restoreDatabase();
     }
 
     public function testCreateBlog() {
@@ -43,7 +39,7 @@ class AdminControllerTest extends WebTestCase {
         $response = $this->client->getResponse();
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals(count(json_decode($response->getContent(), true)), 3);
+        $this->assertCount(3, json_decode($response->getContent(), true));
     }
 
     public function testCreateBlogWithLongTitle() {
@@ -56,7 +52,7 @@ class AdminControllerTest extends WebTestCase {
         $this->client->request('POST', $this->router->generate('KoiosBlogBackendBundle_create_blog'), array(), array(), array(), json_encode($data));
 
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(count(json_decode($this->client->getResponse()->getContent(), true)), 1);
+        $this->assertCount(1, json_decode($this->client->getResponse()->getContent()));
     }
 
     public function testEditBlog() {

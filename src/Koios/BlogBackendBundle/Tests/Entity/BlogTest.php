@@ -85,5 +85,6 @@ class BlogTest extends \PHPUnit_Framework_TestCase {
 
         $blog->setUpdatedValue();
         $this->assertNotSame($dateTime, $blog->getUpdated());
+        $this->assertInstanceOf('DateTime', $blog->getUpdated());
     }
 }

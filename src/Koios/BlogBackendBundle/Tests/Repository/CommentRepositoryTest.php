@@ -2,11 +2,11 @@
 
 namespace Koios\BlogBackendBundle\Tests\Repository;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Koios\BlogTestCase;
 use Koios\BlogBackendBundle\Entity\Blog;
 use Koios\BlogBackendBundle\Entity\Comment;
 
-class CommentRepositoryTest extends WebTestCase
+class CommentRepositoryTest extends BlogTestCase
 {
     protected $commentRepo = null;
     protected $blogRepo = null;
@@ -25,24 +25,23 @@ class CommentRepositoryTest extends WebTestCase
     public function testGetCommentsForBlog()
     {
         $unapproved = $this->commentRepo->getCommentsForBlog(1, false);
-        $this->assertEquals(count($unapproved), 1);
+        $this->assertCount(1, $unapproved);
 
         $approved = $this->commentRepo->getCommentsForBlog(1, true);
-        $this->assertEquals(count($approved), 1);
+        $this->assertCount(1, $approved);
     }
 
     public function testGetLatestComments()
     {
         $comments = $this->commentRepo->getLatestComments(2);
 
-        $this->assertEquals(count($comments), 2);
+        $this->assertCount(2, $comments);
 
         $this->assertLessThanOrEqual($comments[0]->getCreated(), $comments[1]->getCreated());
     }
 
     public function testAddAndRetrievalCommentsToBlog()
     {
-        backupDatabase();
         $blog = new Blog();
 
         $comment = new Comment();
@@ -51,7 +50,6 @@ class CommentRepositoryTest extends WebTestCase
         $comment->setBlog($blog);
 
         $this->assertEquals($blog->getComments()[0], $comment);
-        restoreDatabase();
     }
 
     public function testCommentIdRetrieval()

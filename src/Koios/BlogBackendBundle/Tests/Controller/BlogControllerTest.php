@@ -2,10 +2,11 @@
 
 namespace Koios\BlogBackendBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Koios\BlogBackendBundle\Controller\BlogController;
 
-class BlogControllerTest extends WebTestCase {
+use Koios\BlogTestCase;
+
+class BlogControllerTest extends BlogTestCase {
     protected $client;
     protected $router;
 
@@ -24,7 +25,7 @@ class BlogControllerTest extends WebTestCase {
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $content = json_decode($this->client->getResponse()->getContent());
-        $this->assertEquals(2, count($content));
+        $this->assertCount(2, $content);
 
         $firstCreated = \DateTime::createFromFormat(\DateTime::ATOM, $content[0]->created);
         $secondCreated = \DateTime::createFromFormat(\DateTime::ATOM, $content[1]->created);
@@ -68,7 +69,7 @@ class BlogControllerTest extends WebTestCase {
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $content = json_decode($this->client->getResponse()->getContent());
-        $this->assertEquals(2, count($content));
+        $this->assertCount(2, $content);
 
         $firstCreated = \DateTime::createFromFormat(\DateTime::ATOM, $content[0]->created);
         $secondCreated = \DateTime::createFromFormat(\DateTime::ATOM, $content[1]->created);
@@ -101,6 +102,5 @@ class BlogControllerTest extends WebTestCase {
         );
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        restoreDatabase();
     }
 }

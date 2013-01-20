@@ -2,9 +2,9 @@
 
 namespace Koios\BlogBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Koios\BlogTestCase;
 
-class PageControllerTest extends WebTestCase
+class PageControllerTest extends BlogTestCase
 {
     public function testAbout()
     {
@@ -12,7 +12,7 @@ class PageControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/about');
 
-        $this->assertEquals(1, $crawler->filter('h1:contains("About symblog")')->count());
+        $this->assertCount(1, $crawler->filter('h1:contains("About symblog")'));
     }
 
     public function testIndex()
@@ -22,15 +22,15 @@ class PageControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         // Check there are some blog entries on the page
-        $this->assertTrue($crawler->filter('article.blog')->count() > 0);
+        $this->assertGreaterThan(0, $crawler->filter('article.blog')->count());
 
         // Find the first link, get the title, ensure this is loaded on the next page
         $blogLink   = $crawler->filter('article.blog h2 a')->first();
         $blogTitle  = $blogLink->text();
-        //$crawler    = $client->click($blogLink->link());
+        $crawler    = $client->click($blogLink->link());
 
         // Check the h2 has the blog title in it
-        $this->assertEquals(1, $crawler->filter('h2:contains("' . $blogTitle .'")')->count());
+        $this->assertCount(1, $crawler->filter('h2:contains("' . $blogTitle .'")'));
     }
 
     public function testContact()
@@ -39,7 +39,7 @@ class PageControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/contact');
 
-        $this->assertEquals(1, $crawler->filter('h1:contains("Contact symblog")')->count());
+        $this->assertCount(1, $crawler->filter('h1:contains("Contact symblog")'));
 
         // Select based on button value, or id or name for buttons
         $form = $crawler->selectButton('Submit')->form();
@@ -66,6 +66,6 @@ class PageControllerTest extends WebTestCase
 
         $crawler = $client->followRedirect();
 
-        $this->assertEquals(1, $crawler->filter('body:contains("Your contact enquiry was successfully sent.  Thank you!")')->count());
+        $this->assertCount(1, $crawler->filter('body:contains("Your contact enquiry was successfully sent.  Thank you!")'));
     }
 }

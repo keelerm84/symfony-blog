@@ -72,7 +72,6 @@ class BlogController extends Controller {
                  ->setStatusCode(200)
                  ->setData($comments);
 
-
         return $this->get('fos_rest.view_handler')->handle($view, $this->getRequest(), $response);
     }
 

@@ -20,7 +20,7 @@ class CommentRepository extends EntityRepository
         ->addOrderBy('c.created')
         ->setParameter('blog_id', $blogId);
 
-        if (false === is_null($approved)) {
+        if (null !== $approved) {
             $qb->andWhere('c.approved = :approved')
                 ->setParameter('approved', $approved ? 1 : 0);
         }
@@ -35,7 +35,7 @@ class CommentRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult();
 
-        if (false === is_null($limit)) {
+        if (null !== $limit) {
             array_splice($results, $limit);
         }
 

@@ -45,7 +45,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase {
         $comment->setUpdated($dateTime);
         $this->assertEquals($dateTime, $comment->getUpdated());
 
-        $comment->setUpdatedValue($dateTime);
+        $comment->setUpdatedValue();
         $this->assertEquals($dateTime, $comment->getUpdated());
     }
 

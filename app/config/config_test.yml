@@ -3,6 +3,7 @@ imports:
 
 framework:
     test: ~
+    csrf_protection: false
     session:
         storage_id: session.storage.filesystem
 
@@ -18,3 +19,12 @@ doctrine:
         driver: pdo_sqlite
         path: %kernel.cache_dir%/test.db
         charset: UTF8
+
+security:
+  firewalls:
+    secured_area:
+      pattern: ^/
+      stateless: true
+      http_basic:
+        provider: in_memory
+        realm: "Secured API Admin"

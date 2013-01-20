@@ -2,9 +2,9 @@
 
 namespace Koios\BlogBackendBundle\Tests\Repository;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Koios\BlogTestCase;
 
-class BlogRepositoryTest extends WebTestCase
+class BlogRepositoryTest extends BlogTestCase
 {
     protected $repo = null;
 
@@ -21,7 +21,7 @@ class BlogRepositoryTest extends WebTestCase
     {
         $blogs = $this->repo->getLatestBlogs(2);
 
-        $this->assertTrue(count($blogs) == 2);
+        $this->assertCount(2, $blogs);
 
         $this->assertLessThanOrEqual($blogs[0]->getCreated(), $blogs[1]->getCreated());
     }
@@ -57,7 +57,7 @@ class BlogRepositoryTest extends WebTestCase
 
     public function testNoTagWeight()
     {
-        $this->assertTrue(0 === count($this->repo->getTagWeights(array())));
+        $this->assertCount(0, $this->repo->getTagWeights(array()));
     }
 
     public function testBlogIdRetrieval()
